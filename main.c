@@ -55,7 +55,7 @@ void print_pe_header(const char *buf, int len)
 	ad = *(int *)&buf[0x3c];
 	if (ad < 0 || ad + 4 + sizeof(*ph1) + sizeof(*ph2) > len)
 	{
-		printf("FILE IS TOO SHORT: %08x < %08x", len, ad);
+		printf("FILE IS TOO SHORT: %08x < %08x\n", len, ad);
 		return;
 	}
 	
@@ -153,7 +153,7 @@ void parse_pe(struct aout *a, const char *buf, int len)
 	ad = *(int *)&buf[0x3c];
 	if (ad < 0 || ad + 4 + sizeof(*ph1) + sizeof(*ph2) > len)
 	{
-		printf("FILE IS TOO SHORT: %08x < %08x", len, ad);
+		printf("FILE IS TOO SHORT: %08x < %08x\n", len, ad);
 		return;
 	}
 	
