@@ -6,7 +6,7 @@
 #include "pe.h"
 #include "a.out.h"
 
-#define OFFSET(a, b) (((char*)(&a->b)) - ((char *)a))
+#define OFFSET(a, b) (((char *)(&a->b)) - ((char *)a))
 #define INFO(a, b, c, d, e) printf("%08x: "c"%*.s%s\n", a + OFFSET(b, e), b->e, 9 - d, "", #e)
 
 struct aout
