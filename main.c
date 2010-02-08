@@ -285,12 +285,13 @@ void write_aout(struct aout *a, const char *buf, int len, const char *src)
 				write_zero(f, a->header.a_data - a->rdatalen - (a->rdatavad - a->datavad));
 		}
 		fclose(f);
+		chmod(file, 0755);
 	}
 	
 	free(file);
 }
 
-void read_pe(const char *file, int parse)
+void convert_pe(const char *file, int parse)
 {
 	FILE *f;
 	struct stat st;
@@ -336,7 +337,7 @@ int main(int argc, char *argv[])
 		{
 			if (i > 1) printf("\n");
 			if (argc > 2) printf("==== %s\n", argv[i]);
-			read_pe(argv[i], parse);
+			convert_pe(argv[i], parse);
 		}
 	}
 	return 0;
