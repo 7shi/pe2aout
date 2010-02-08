@@ -257,7 +257,7 @@ void write_aout(struct aout *a, const char *buf, int len, const char *src)
 	
 	file = strdup(src);
 	*strrchr(file, '.') = '\0';
-	printf("convert pe to a.out: %s => %s\n", src, file);
+	printf("convert PE to a.out: %s => %s\n", src, file);
 	
 	f = fopen(file, "wb");
 	if (f == NULL)
@@ -335,8 +335,11 @@ int main(int argc, char *argv[])
 			parse = 1;
 		else
 		{
-			if (i > 1) printf("\n");
-			if (argc > 2) printf("==== %s\n", argv[i]);
+			if (parse)
+			{
+				if (i > 1) printf("\n");
+				if (argc > 2) printf("==== %s\n", argv[i]);
+			}
 			convert_pe(argv[i], parse);
 		}
 	}
