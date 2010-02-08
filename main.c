@@ -235,8 +235,9 @@ void parse_pe(struct aout *a, const char *buf, int len)
 
 void write_zero(FILE *f, int count)
 {
+	void *buf;
 	if (count == 0) return;
-	void *buf = calloc(count, 1);
+	buf = calloc(count, 1);
 	fwrite(buf, count, 1, f);
 	free(buf);
 }
