@@ -230,7 +230,7 @@ void parse_pe(struct aout *a, const char *buf, int len)
 #endif
 		ad += sizeof(*sh);
 	}
-	a->header.a_total += A_SYMPOS(a->header);
+	a->header.a_total += A_SYMPOS(a->header) - a->header.a_hdrlen;
 }
 
 void write_zero(FILE *f, int count)
