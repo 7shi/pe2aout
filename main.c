@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 
 #include "pe.h"
-#include "a.out.h"
+#include "../aout-tool/a.out.h"
 
 #define OFFSET(a, b) (((char *)(&a->b)) - ((char *)a))
 #define INFO(a, b, c, d, e) printf("%08x: "c"%*.s%s\n", a + OFFSET(b, e), b->e, 9 - d, "", #e)
@@ -265,8 +265,19 @@ void write_aout(struct aout *a, const char *buf, int len, const char *src)
 		printf("CAN NOT WRITE\n");
 	else
 	{
+		int entry = a->header.a_entry;
+		if (a->textvad > 10) a->header.a_entry = 0;
 		fwrite(&a->header, sizeof(a->header), 1, f);
-		write_zero(f, a->textvad);
+		if (a->textvad > 10)
+		{
+			char jmp[10];
+			jmp[0] = 0xb8;
+			*(int *)&jmp[1] = a->header.a_text + a->header.a_data + a->header.a_bss;
+			jmp[5] = 0xe9;
+			*(int *)&jmp[6] = entry - 10;
+			fwrite(jmp, 10, 1, f);
+			write_zero(f, a->textvad - 10);
+		}
 		fwrite(&buf[a->textpos], a->textlen, 1, f);
 		write_zero(f, a->header.a_text - a->textlen - a->textvad);
 		if (a->datalen > 0)
@@ -286,7 +297,9 @@ void write_aout(struct aout *a, const char *buf, int len, const char *src)
 				write_zero(f, a->header.a_data - a->rdatalen - (a->rdatavad - a->datavad));
 		}
 		fclose(f);
+#ifndef WIN32
 		chmod(file, 0755);
+#endif
 	}
 	
 	free(file);
